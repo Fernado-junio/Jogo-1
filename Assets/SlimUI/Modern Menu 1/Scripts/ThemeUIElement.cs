@@ -8,9 +8,11 @@ namespace SlimUI.ModernMenu{
 		[Header("Parameters")]
 		Color outline;
 		Image image;
+		SpriteRenderer sprite;
 		GameObject message;
 		public enum OutlineStyle {solidThin, solidThick, dottedThin, dottedThick};
 		public bool hasImage = false;
+		public bool hasSprite = false;
 		public bool isText = false;
 
 		protected override void OnSkinUI(){
@@ -19,6 +21,13 @@ namespace SlimUI.ModernMenu{
 			if(hasImage){
 				image = GetComponent<Image>();
 				image.color = themeController.currentColor;
+				
+				
+			}
+			if (hasSprite)
+			{
+				sprite = GetComponent<SpriteRenderer>();
+				sprite.color = themeController.currentColor;
 			}
 
 			message = gameObject;

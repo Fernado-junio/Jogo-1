@@ -55,6 +55,7 @@ namespace SlimUI.ModernMenu{
 		private float sliderValueYSensitivity = 0.0f;
 		private float sliderValueSmoothing = 0.0f;
 		
+		
 
 		public void  Start (){
 			// check difficulty

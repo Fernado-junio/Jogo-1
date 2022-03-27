@@ -9,10 +9,12 @@ namespace SlimUI.ModernMenu
 	public class MainMenu : MonoBehaviour
 	{
 		Animator CameraObject;
-
 		[Space]
-
+		
+		
 		public bool isMobile = false;
+		
+		
 
 		[Header("Loaded Scene")]
 		[Tooltip("The name of the scene in the build settings that will load")]
@@ -23,6 +25,8 @@ namespace SlimUI.ModernMenu
 		public Theme theme;
 		int themeIndex;
 		public ThemeEditor themeController;
+		
+		
 
 		[Header("Panels")]
 		public GameObject[] menus;
@@ -33,6 +37,14 @@ namespace SlimUI.ModernMenu
 		public GameObject mainCanvas;
 
 		[Header("Settings Panels")]
+		public TMP_Dropdown drop;
+		public GameObject NovoJogo;
+		
+		public GameObject carregarJogo;
+		
+		[Header("Telas de erro")]
+		public GameObject lancamento;
+		[Header("outros")]
 		[Tooltip("The UI Panel that holds the CONTROLS window tab")]
 		public GameObject PanelControls;
 		[Tooltip("The UI Panel that holds the VIDEO window tab")]
@@ -47,6 +59,11 @@ namespace SlimUI.ModernMenu
 		public GameObject PanelCombat;
 		[Tooltip("The UI Sub-Panel under KEY BINDINGS for GENERAL")]
 		public GameObject PanelGeneral;
+		
+		
+		
+		
+		
 
 		[Header("SFX")]
 		[Tooltip("The GameObject holding the Audio Source component for the HOVER SOUND")]
@@ -72,22 +89,38 @@ namespace SlimUI.ModernMenu
 		public GameObject lineCombat;
 		[Tooltip("Highlight Image for when GENERAL Sub-Tab is selected in KEY BINDINGS")]
 		public GameObject lineGeneral;
+		
 
 		[Header("LOADING SCREEN")]
 		public GameObject loadingMenu;
 		public Slider loadBar;
 		public TMP_Text finishedLoadingText;
+		
 
 		void Start()
 		{
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
 			CameraObject = transform.GetComponent<Animator>();
 			DisableMenus();
 			if(isMobile) menus[0].SetActive(true);
+			
+			NovoJogo.SetActive(false);
+			carregarJogo.SetActive(false);
 		}
-
+		
 		void Awake()
 		{
 			SetThemeColors();
+			
+		}
+		public void mostararAvisoLancamento()
+		{
+			lancamento.SetActive(true);
+		}
+		public void esconderAvisoLancamento()
+		{
+			lancamento.SetActive(false);
 		}
 
 		void SetThemeColors()
@@ -106,7 +139,28 @@ namespace SlimUI.ModernMenu
 				themeIndex = 2;
 			}
 		}
+		public void dropDownTema()
+		{
+			string valorDrop = drop.options[drop.value].text;
+			if (valorDrop == "Dourado")
+			{
+				theme = Theme.custom1;
+				SetThemeColors();
+			}
+			if (valorDrop == "Azul")
+			{
+				theme = Theme.custom2;
+				SetThemeColors();
+			}
+			if (valorDrop == "Verde")
+			{
+				theme = Theme.custom3;
+				SetThemeColors();
+			}
+		}
+		
 
+		
 		public void OpenMenu(int menuIndex)
 		{
 			DisableMenus();
@@ -115,11 +169,40 @@ namespace SlimUI.ModernMenu
 
 		public void NewGame()
 		{
+			NovoJogo.SetActive(true);
+			DisableMenus();
+			CameraObject.SetTrigger("AtivarAnime1");
+		}
+		
+		public void CarregarJogo()
+		{
+			CameraObject.SetTrigger("AnimCarregarJogo");
+			carregarJogo.SetActive(true);
+			DisableMenus();
+			
+		}
+		public void VoltarCarregarJogo()
+		{
+			CameraObject.SetTrigger("AnimCarregarJogo2");
+			carregarJogo.SetActive(false);
+			DisableMenus();
+		}
+		public void IniciarNovoJogo()
+		{
+			
+		}
+		public void continuarJogo()
+		{
 			if(sceneName != ""){
 				StartCoroutine(LoadAsynchronously(sceneName));
 			}
 		}
-
+		public void voltarNovoJogo()
+		{
+			NovoJogo.SetActive(false);
+			DisableMenus();
+			CameraObject.SetTrigger("AtivarAnime2");
+		}
 		public void Position2()
 		{
 			DisableMenus();
@@ -211,10 +294,12 @@ namespace SlimUI.ModernMenu
 			PanelGeneral.SetActive(true);
 			lineGeneral.SetActive(true);
 		}
-
+		
+		
 		public void PlayHover()
 		{
 			hoverSound.Play();
+
 		}
 
 		public void PlaySFXHover()
